@@ -7,8 +7,8 @@ class Autor(models.Model):
 
     def __str__(self):
         return f'({self.id}) {self.nome}'
-    
+
     class Meta:
-        verbose_name = "autor"
-        verbose_name_plural = "autores"
+        verbose_name = 'autor'
+        verbose_name_plural = 'autores'
         ordering = ['id']
