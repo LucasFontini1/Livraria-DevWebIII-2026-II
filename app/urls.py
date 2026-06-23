@@ -14,13 +14,22 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 
-from core.views import AutorViewSets, CategoriaViewSet, EditoraViewSet, LivroViewSets, UserRegistrationView, UserViewSet
+from core.views import (
+    AutorViewSets,
+    CategoriaViewSet,
+    CompraViewSet,
+    EditoraViewSet,
+    LivroViewSets,
+    UserRegistrationView,
+    UserViewSet,
+)
 from uploader.router import router as uploader_router
 
 router = DefaultRouter()
 
 router.register(r'autores', AutorViewSets, basename='autores')
 router.register(r'categorias', CategoriaViewSet, basename='categorias')
+router.register(r'compras', CompraViewSet, basename='compras')
 router.register(r'editoras', EditoraViewSet, basename='editoras')
 router.register(r'livros', LivroViewSets, basename='livros')
 router.register(r'usuarios', UserViewSet, basename='usuarios')
