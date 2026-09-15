@@ -76,16 +76,18 @@ class CategoriaAdmin(admin.ModelAdmin):
 
 @admin.register(Compra)
 class CompraAdmin(admin.ModelAdmin):
-    list_display = ('usuario', 'status', 'total_formatado')  # mostra na listagem
-    ordering = ('usuario', 'status')
-    list_per_page = 10
-    inlines = [ItensCompraInline]
-    readonly_fields = ("total_formatado",)  # mostra dentro do formulário
-
     @admin.display(description="Total")
     def total_formatado(self, obj):
         """Exibe R$ 123,45 em vez de 123.45."""
         return f"R$ {obj.total:.2f}"
+
+    list_display = ('usuario', 'status', 'total_formatado', 'data', 'data_criacao')
+    ordering = ('usuario', 'status', 'data')
+    search_fields = ('usuario__email', 'status')
+    list_filter = ('status', 'data', 'data_criacao')
+    list_per_page = 10
+    inlines = [ItensCompraInline]
+    readonly_fields = ('data', 'total_formatado', 'data_criacao')
 
 @admin.register(Editora)  # noqa: E302
 class EditoraAdmin(admin.ModelAdmin):
