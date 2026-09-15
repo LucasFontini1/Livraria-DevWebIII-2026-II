@@ -81,13 +81,13 @@ class CompraAdmin(admin.ModelAdmin):
         """Exibe R$ 123,45 em vez de 123.45."""
         return f"R$ {obj.total:.2f}"
 
-    list_display = ('usuario', 'status', 'total_formatado', 'data', 'data_criacao')
+    list_display = ('usuario', 'status', 'total_formatado', 'data', 'data_atualizacao')
     ordering = ('usuario', 'status', 'data')
     search_fields = ('usuario__email', 'status')
-    list_filter = ('status', 'data', 'data_criacao')
+    list_filter = ('status', 'data', 'data_atualizacao')
     list_per_page = 10
     inlines = [ItensCompraInline]
-    readonly_fields = ('data', 'total_formatado', 'data_criacao')
+    readonly_fields = ('data', 'total_formatado', 'data_atualizacao')
 
 @admin.register(Editora)  # noqa: E302
 class EditoraAdmin(admin.ModelAdmin):

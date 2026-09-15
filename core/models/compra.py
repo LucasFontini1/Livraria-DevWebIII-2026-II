@@ -5,6 +5,15 @@ from .user import User
 
 
 class Compra(models.Model):
+    class TipoPagamento(models.IntegerChoices):
+        CARTAO_CREDITO = 1, 'Cartão de Crédito'
+        CARTAO_DEBITO = 2, 'Cartão de Débito'
+        PIX = 3, 'PIX'
+        BOLETO = 4, 'Boleto'
+        TRANSFERENCIA_BANCARIA = 5, 'Transferência Bancária'
+        DINHEIRO = 6, 'Dinheiro'
+        OUTRO = 7, 'Outro'
+        CHEQUE = 8, 'Cheque'
     class StatusCompra(models.IntegerChoices):
         CARRINHO = 1, 'Carrinho'
         FINALIZADO = 2, 'Finalizado'
@@ -15,6 +24,10 @@ class Compra(models.Model):
     status = models.IntegerField(choices=StatusCompra.choices, default=StatusCompra.CARRINHO)
     data = models.DateTimeField(auto_now_add=True)
     data_atualizacao = models.DateTimeField(auto_now=True)
+    tipo_pagamento = models.IntegerField(
+        choices=TipoPagamento.choices,
+        default=TipoPagamento.CARTAO_CREDITO
+    )
 
     @property
     def total(self):
