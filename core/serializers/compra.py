@@ -13,7 +13,7 @@ from core.models import Compra, ItensCompra
 class ItensCompraCreateUpdateSerializer(ModelSerializer):
     class Meta:
         model = ItensCompra
-        fields = ('livro', 'quantidade')
+        fields = ('livro', 'quantidade', 'preco')
 
     def validate_quantidade(self, quantidade):
         if quantidade <= 0:
@@ -31,7 +31,7 @@ class ItensCompraListSerializer(ModelSerializer):
 
     class Meta:
         model = ItensCompra
-        fields = ('quantidade', 'livro')
+        fields = ('quantidade', 'livro', 'preco')
         depth = 1
 
 
@@ -39,11 +39,11 @@ class ItensCompraSerializer(ModelSerializer):
     total = SerializerMethodField()
 
     def get_total(self, instance):
-        return instance.livro.preco * instance.quantidade
+        return instance.quantidade * instance.preco
 
     class Meta:
         model = ItensCompra
-        fields = ('livro', 'quantidade', 'total')
+        fields = ('livro', 'quantidade', 'total', 'preco')
         depth = 1
 
 
@@ -55,19 +55,22 @@ class CompraCreateUpdateSerializer(ModelSerializer):
         fields = ('id', 'usuario', 'itens')
 
     def create(self, validated_data):
-        itens_data = validated_data.pop('itens')
+        itens = validated_data.pop('itens')
         compra = Compra.objects.create(**validated_data)
-        for item_data in itens_data:
-            ItensCompra.objects.create(compra=compra, **item_data)
+        for item in itens:
+            item['preco'] = item['livro'].preco
+            ItensCompra.objects.create(compra=compra, **item)
         compra.save()
         return compra
 
     def update(self, compra, validated_data):
-        itens_data = validated_data.pop('itens', [])
-        if itens_data:
+        itens = validated_data.pop('itens')
+        if itens:
             compra.itens.all().delete()
-            for item_data in itens_data:
-                ItensCompra.objects.create(compra=compra, **item_data)
+            for item in itens:
+                item['preco'] = item['livro'].preco
+                ItensCompra.objects.create(compra=compra, **item)
+        compra.save()
         return super().update(compra, validated_data)
 
 
